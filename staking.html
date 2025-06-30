@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stake SWF – Moabite Federation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stake SWF – Sovran Wealth Fund Portal</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     body {
@@ -11,132 +11,111 @@
       background-color: #0e0e0e;
       color: #fefefe;
       line-height: 1.6;
-    }header {
-  background-color: #111;
-  color: gold;
-  padding: 1.5rem 1rem;
-  text-align: center;
-  border-bottom: 4px solid crimson;
-  position: relative;
-}
-
-.menu-toggle {
-  background-color: crimson;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-top: 1rem;
-}
-
-.menu {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  background-color: #1a1a1a;
-  padding: 1rem;
-}
-
-.menu.show {
-  display: flex;
-}
-
-.menu a {
-  color: #ddd;
-  text-decoration: none;
-  font-weight: bold;
-  margin: 0.5rem 0;
-}
-
-.menu a:hover {
-  color: gold;
-}
-
-main {
-  padding: 2rem;
-  max-width: 960px;
-  margin: auto;
-  background-color: #1b1b1b;
-  box-shadow: 0 0 12px #222;
-}
-
-h2, h3 {
-  color: #fbbc05;
-}
-
-.dashboard {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #111;
-  border: 2px solid #fbbc05;
-  border-radius: 10px;
-}
-
-.dashboard label,
-.dashboard button,
-.dashboard input,
-.dashboard select {
-  display: block;
-  margin: 1rem 0;
-  width: 100%;
-  font-size: 1rem;
-}
-
-.seal {
-  max-width: 200px;
-  display: block;
-  margin: 2rem auto;
-  border: 2px solid #fbbc05;
-  border-radius: 50%;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-}
-
-footer {
-  text-align: center;
-  padding: 1rem;
-  background-color: #111;
-  border-top: 2px solid crimson;
-  font-size: 0.9rem;
-}
-
-#walletStatus {
-  font-size: 0.95rem;
-  margin-top: 1rem;
-  color: #99ff99;
-}
-
-.info-box {
-  background-color: #222;
-  border: 1px solid #555;
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 10px;
-}
-
+    }
+    header {
+      background-color: #111;
+      color: gold;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 4px solid crimson;
+    }
+    .menu-toggle {
+      background-color: crimson;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      border-radius: 5px;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: #1a1a1a;
+      padding: 1rem;
+    }
+    .menu.show {
+      display: flex;
+    }
+    .menu a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    .menu a:hover {
+      color: gold;
+    }
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background-color: #1b1b1b;
+      box-shadow: 0 0 12px #222;
+    }
+    h2 {
+      color: #fbbc05;
+    }
+    .dashboard {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #111;
+      border: 2px solid #fbbc05;
+      border-radius: 10px;
+    }
+    .dashboard label,
+    .dashboard button,
+    .dashboard input,
+    .dashboard select {
+      display: block;
+      margin: 1rem 0;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .seal {
+      max-width: 200px;
+      display: block;
+      margin: 2rem auto;
+      border: 2px solid #fbbc05;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+    .rewards-log {
+      margin-top: 2rem;
+      background-color: #222;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    .rewards-log h3 {
+      color: #fbbc05;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #111;
+      border-top: 2px solid crimson;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
-<body>  <header>
+<body>
+  <header>
+    <h1>Stake Your SWF – Sovran Wealth Fund</h1>
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
     <div class="menu" id="mainMenu">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="staking.html">Staking</a>
       <a href="wallet-login.html">Wallet Login</a>
       <a href="governance.html">Governance</a>
-      <a href="swf-ecosystem.html">SWF Ecosystem</a>
+      <a href="rewards-history.html">Rewards</a>
     </div>
-    <h1>Stake SWF & Earn Crypto</h1>
-    <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
-  </header>  <img src="images/SWFToken_Official_Image.png" alt="SWF Token Image" class="seal">  <main>
-    <h2>Stake Your SWF Tokens</h2>
-    <div class="info-box">
-      <p>SWF Staking empowers Sovran Wealth Fund members to earn passive income while reinforcing the Moabite Federation’s decentralized economy. When you stake, you help build liquidity, support tribal projects, and receive real rewards based on network activity.</p>
-      <p>Choose your preferred reward token: BNB, ETH, BTC, or XRP — powered by smart contracts and community governance.</p>
-    </div><div id="walletStatus">🔌 Wallet not connected</div>
-
-<div class="dashboard">
-  <label for="poolSelect">Choose Reward Token:</label>
+  </header>  <img src="assets/moabite-federation-seal.png" alt="Moabite Federation Seal" class="seal" />  <main>
+    <h2>Stake & Earn Passive Income</h2>
+    <p>Stake your SWF tokens and earn real, tangible value in your selected reward token. Choose from BNB, ETH, BTC, or XRP. Your staked tokens support the treasury and generate yield from verified smart contract activity.</p><div class="dashboard">
+  <label for="poolSelect">Select Reward Token:</label>
   <select id="poolSelect">
     <option value="bnb">BNB</option>
     <option value="eth">ETH</option>
@@ -147,31 +126,28 @@ footer {
   <label for="stakeAmount">Amount to Stake (SWF):</label>
   <input type="number" id="stakeAmount" placeholder="Enter amount" />
 
-  <button onclick="approveAndStake()">✅ Approve & Stake</button>
-  <button onclick="claimRewards()">💰 Claim Rewards</button>
-  <button onclick="unstakeTokens()">🚫 Unstake Tokens</button>
-
+  <button onclick="approveAndStake()">Approve & Stake</button>
+  <button onclick="claimRewards()">Claim Rewards</button>
   <p id="status"></p>
-  <p><strong>Your Staked Balance:</strong> <span id="stakedBalance">--</span> SWF</p>
 </div>
 
-<h3>What You’re Supporting</h3>
-<ul>
-  <li>🌍 Indigenous land acquisition & stewardship</li>
-  <li>🏛️ Community-led governance and DAO operations</li>
-  <li>💼 Micro-investments in sovereign businesses</li>
-  <li>🧠 Education, empowerment, and restoration of tribal legacy</li>
-</ul>
+<div class="rewards-log">
+  <h3>Your Reward History (coming soon)</h3>
+  <ul id="rewardHistory">
+    <li>Loading history...</li>
+  </ul>
+</div>
 
   </main>  <footer>
-    <p>Contact us: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a></p>
+    <p>Contact: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a></p>
   </footer>  <script src="https://cdn.jsdelivr.net/npm/web3@1.7.5/dist/web3.min.js"></script>  <script>
     let web3;
+    let swfToken = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
+    let stakingContract = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
     let userAccount;
-    const swfToken = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
-    const stakingContract = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
 
-    const pools = { bnb: 0, eth: 1, btc: 2, xrp: 3 };
+    const swfABI = [/* full ABI here */];
+    const stakingABI = [/* full staking contract ABI here */];
 
     async function loadWeb3() {
       if (window.ethereum) {
@@ -179,61 +155,45 @@ footer {
         await ethereum.request({ method: 'eth_requestAccounts' });
         const accounts = await web3.eth.getAccounts();
         userAccount = accounts[0];
-        document.getElementById("walletStatus").textContent = `✅ Connected: ${userAccount}`;
-        fetchStakedBalance();
       }
     }
 
     async function approveAndStake() {
-      try {
-        const amount = document.getElementById("stakeAmount").value;
-        const token = document.getElementById("poolSelect").value;
-        const status = document.getElementById("status");
+      const amount = document.getElementById("stakeAmount").value;
+      const token = document.getElementById("poolSelect").value;
+      const status = document.getElementById("status");
 
-        status.textContent = "Approving...";
+      try {
+        status.textContent = "Approving SWF...";
         const swf = new web3.eth.Contract(swfABI, swfToken);
         await swf.methods.approve(stakingContract, web3.utils.toWei(amount)).send({ from: userAccount });
 
-        status.textContent = "Staking...";
+        status.textContent = "Staking in progress...";
         const stake = new web3.eth.Contract(stakingABI, stakingContract);
-        await stake.methods.stake(pools[token]).send({ from: userAccount });
+        await stake.methods.stake(getPoolId(token)).send({ from: userAccount });
 
-        status.textContent = "✅ Staked successfully!";
-        fetchStakedBalance();
+        status.textContent = "Successfully staked!";
       } catch (e) {
-        document.getElementById("status").textContent = "❌ Error during staking: " + e.message;
+        status.textContent = `Error: ${e.message}`;
       }
     }
 
     async function claimRewards() {
       const token = document.getElementById("poolSelect").value;
       const stake = new web3.eth.Contract(stakingABI, stakingContract);
-      await stake.methods.claimRewards(pools[token]).send({ from: userAccount });
-      document.getElementById("status").textContent = "💰 Rewards claimed!";
+      await stake.methods.claimRewards(getPoolId(token)).send({ from: userAccount });
+      document.getElementById("status").textContent = "Rewards claimed!";
     }
 
-    async function unstakeTokens() {
-      const token = document.getElementById("poolSelect").value;
-      const stake = new web3.eth.Contract(stakingABI, stakingContract);
-      await stake.methods.unstake(pools[token]).send({ from: userAccount });
-      document.getElementById("status").textContent = "🚫 Tokens unstaked.";
-      fetchStakedBalance();
-    }
-
-    async function fetchStakedBalance() {
-      const token = document.getElementById("poolSelect").value;
-      const stake = new web3.eth.Contract(stakingABI, stakingContract);
-      const balance = await stake.methods.stakedBalanceOf(userAccount, pools[token]).call();
-      document.getElementById("stakedBalance").textContent = web3.utils.fromWei(balance);
+    function getPoolId(token) {
+      const pools = { bnb: 0, eth: 1, btc: 2, xrp: 3 };
+      return pools[token];
     }
 
     function toggleMenu() {
       document.getElementById('mainMenu').classList.toggle('show');
     }
 
-    const swfABI = [/* Insert SWF ABI here */];
-    const stakingABI = [/* Insert Staking ABI here */];
-
     loadWeb3();
   </script></body>
-                             </html>
+</html>
