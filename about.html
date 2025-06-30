@@ -1,1 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us – Moabite Federation</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e0e;
+      color: #fefefe;
+      line-height: 1.6;
+    }
 
+    header {
+      background-color: #111;
+      color: gold;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 4px solid crimson;
+      position: relative;
+    }
+
+    .menu-toggle {
+      background-color: crimson;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 1rem;
+    }
+
+    .menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: #1a1a1a;
+      padding: 1rem;
+    }
+
+    .menu.show {
+      display: flex;
+    }
+
+    .menu a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+
+    .menu a:hover {
+      color: gold;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background-color: #1b1b1b;
+      box-shadow: 0 0 12px #222;
+    }
+
+    h2 {
+      color: #fbbc05;
+    }
+
+    .seal {
+      max-width: 200px;
+      display: block;
+      margin: 2rem auto;
+      border: 2px solid #fbbc05;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #111;
+      border-top: 2px solid crimson;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="menu" id="mainMenu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="staking.html">Staking</a>
+      <a href="wallet-login.html">Wallet Login</a>
+      <a href="governance.html">Governance</a>
+      <a href="swf-ecosystem.html">SWF Ecosystem</a>
+    </div>
+    <h1>About the Moabite Federation</h1>
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
+  </header>
+
+  <img src="images/moabite-federation-seal.png" alt="Moabite Federation Seal" class="seal">
+
+  <main>
+    <h2>Who We Are</h2>
+    <p>
+      The <strong>Moabite Federation</strong> is a sovereign Indigenous nation dedicated to restoring the rights, land, and spiritual identity of the original people of the Americas. We honor our ancestral ties, governed under divine law, tribal sovereignty, and community-driven principles.
+    </p>
+
+    <h2>Mission & Vision</h2>
+    <p>
+      Our mission is to reclaim our divine birthright, preserve our culture, and build generational wealth through decentralized tools such as the <strong>Sovran Wealth Fund (SWF)</strong>, land stewardship, and educational empowerment.
+    </p>
+
+    <h2>Why It Matters</h2>
+    <p>
+      As descendants of ancient Moors, Washitaw, and Yamassee lineages, we have been historically misclassified and dispossessed. The Moabite Federation serves as a beacon for those seeking to restore their true status, land rights, and spiritual inheritance.
+    </p>
+
+    <h2>Join Us</h2>
+    <p>
+      We invite all who resonate with this purpose to unite, learn, and build together. Membership is open to all who commit to truth, law, and legacy.
+    </p>
+  </main>
+
+  <footer>
+    <p>Contact us: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a></p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mainMenu').classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>
