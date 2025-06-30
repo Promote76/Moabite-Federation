@@ -1,1 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moabite Federation PMA</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e0e;
+      color: #fefefe;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #111;
+      color: gold;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 4px solid crimson;
+      position: relative;
+    }
+    .menu-toggle {
+      background-color: crimson;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      border-radius: 5px;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: #1a1a1a;
+      padding: 1rem;
+    }
+    .menu.show {
+      display: flex;
+    }
+    .menu a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    .menu a:hover {
+      color: gold;
+    }
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background-color: #1b1b1b;
+      box-shadow: 0 0 12px #222;
+    }
+    h2 {
+      color: #fbbc05;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #111;
+      border-top: 2px solid crimson;
+      font-size: 0.9rem;
+    }
+    .seal {
+      max-width: 200px;
+      display: block;
+      margin: 2rem auto;
+      border: 2px solid #fbbc05;
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to The Moabite Federation PMA</h1>
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
+    <div class="menu" id="mainMenu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="staking.html">Staking</a>
+      <a href="wallet-login.html">Wallet Login</a>
+      <a href="governance.html">Governance</a>
+      <a href="rewards-history.html">Rewards</a>
+    </div>
+  </header>
 
+  <img src="assets/moabite-federation-seal.png" alt="Moabite Federation Tribal Seal" class="seal">
+
+  <main>
+    <section>
+      <h2>Guardians of Sovereignty — Keepers of the Ancient Covenant</h2>
+      <p>The <strong>Moabite Federation PMA</strong> is a sovereign Indigenous nation rooted in divine law, spiritual inheritance, and ancestral rights. Operating as a Private Membership Association, we protect our citizens from foreign jurisdiction while building a sacred path forward rooted in ancient wisdom and future technology.</p>
+      <p>We represent the original tribes—Moorish Americans, Washitaw, Yamassee, Gullah, and others—whose bloodlines trace back long before 1492. Our declaration is spiritual, legal, and economic: We are the rightful stewards of this land, the builders of sacred civilizations, and the architects of sovereign wealth.</p>
+    </section>
+
+    <section>
+      <h2>Our Pillars of Power</h2>
+      <ul>
+        <li><strong>Land Reclamation:</strong> Recording tribal lands and sacred titles on our registry and IPFS blockchain.</li>
+        <li><strong>Spiritual Rebirth:</strong> Reviving divine identity and Moorish nationality through birthright claim and temple rites.</li>
+        <li><strong>Economic Empowerment:</strong> Fueled by the Sovran Wealth Fund (SWF) and DeFi infrastructure.</li>
+        <li><strong>Decentralized Governance:</strong> 1 vote = 5 SWF tokens. All leaders except the Grand Vizier serve 5-year terms.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Join the New Sovereign Era</h2>
+      <p>We stand at the intersection of prophecy and innovation. Blockchain meets birthright. Law meets legacy. The Moabite Federation PMA is not just a vision—it is a reality in motion. A living covenant reborn in the digital age.</p>
+      <p><em>“Return to the ways of your ancestors and you shall know freedom.”</em></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Contact us: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a></p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mainMenu').classList.toggle('show');
+    }
+  </script>
+</body>
+  </html>
