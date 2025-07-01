@@ -1,1 +1,157 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SWF Blockchain Explorer</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e0e;
+      color: #fefefe;
+    }
+    header {
+      background-color: #111;
+      color: gold;
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 3px solid crimson;
+    }
+    nav {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    nav a {
+      margin: 0 15px;
+      color: #ccc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      color: gold;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h1, h2 {
+      color: gold;
+    }
+    section {
+      margin-bottom: 3rem;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #222;
+      color: #fff;
+      width: 100%;
+    }
+    button {
+      cursor: pointer;
+      background-color: crimson;
+    }
+    .card {
+      background: #1b1b1b;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+    .card p {
+      color: #ccc;
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SWF Blockchain Explorer</h1>
+  </header>  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="registry.html">Registry</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="dao.html">DAO</a>
+  </nav>  <main>
+    <section class="card">
+      <h2>Wallet Balance Checker</h2>
+      <input type="text" id="walletAddress" placeholder="Enter Wallet Address">
+      <button onclick="checkBalance()">Check Balance</button>
+      <p id="walletBalance"></p>
+    </section><section class="card">
+  <h2>Transaction Lookup</h2>
+  <input type="text" id="txHash" placeholder="Enter Transaction Hash">
+  <button onclick="getTransaction()">Get Transaction Details</button>
+  <pre id="txDetails"></pre>
+</section>
 
+<section class="card">
+  <h2>SWF Token Balance</h2>
+  <input type="text" id="tokenHolder" placeholder="Enter Wallet Address">
+  <button onclick="getTokenBalance()">Get Token Balance</button>
+  <p id="tokenBalance"></p>
+</section>
+
+<section class="card">
+  <h2>Live Gas Price</h2>
+  <button onclick="getGasPrice()">Refresh Gas Price</button>
+  <p id="gasPrice"></p>
+</section>
+
+<section class="card">
+  <h2>Smart Contract Source Code</h2>
+  <input type="text" id="contractAddress" placeholder="Enter Contract Address">
+  <button onclick="fetchSource()">Fetch Source</button>
+  <pre id="sourceCode"></pre>
+</section>
+
+  </main>  <script>
+    let web3;
+
+    window.addEventListener('load', async () => {
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+      } else {
+        alert('Please install MetaMask to use this feature.');
+      }
+    });
+
+    async function checkBalance() {
+      const address = document.getElementById('walletAddress').value;
+      const balance = await web3.eth.getBalance(address);
+      document.getElementById('walletBalance').innerText = `Balance: ${web3.utils.fromWei(balance, 'ether')} ETH`;
+    }
+
+    async function getTransaction() {
+      const hash = document.getElementById('txHash').value;
+      const tx = await web3.eth.getTransaction(hash);
+      document.getElementById('txDetails').innerText = JSON.stringify(tx, null, 2);
+    }
+
+    const swfTokenAddress = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
+    const swfTokenABI = [/* paste ABI here */];
+    const swfToken = new web3.eth.Contract(swfTokenABI, swfTokenAddress);
+
+    async function getTokenBalance() {
+      const address = document.getElementById('tokenHolder').value;
+      const balance = await swfToken.methods.balanceOf(address).call();
+      document.getElementById('tokenBalance').innerText = `Token Balance: ${web3.utils.fromWei(balance)} SWF`;
+    }
+
+    async function getGasPrice() {
+      const gasPrice = await web3.eth.getGasPrice();
+      document.getElementById('gasPrice').innerText = `Current Gas Price: ${web3.utils.fromWei(gasPrice, 'gwei')} GWEI`;
+    }
+
+    async function fetchSource() {
+      const addr = document.getElementById('contractAddress').value;
+      // Display a placeholder while fetching from external APIs like Etherscan is not allowed without a backend key
+      document.getElementById('sourceCode').innerText = 'Source code unavailable. Please check Etherscan or BscScan directly.';
+    }
+  </script></body>
+</html>
