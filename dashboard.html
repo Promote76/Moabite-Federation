@@ -1,142 +1,144 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SWF Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moabite Federation Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+  <script defer src="connect.js"></script>
+  <script defer src="dashboard.js"></script>
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: #fefefe;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #111;
+      color: gold;
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 4px solid crimson;
+    }
+    main {
+      max-width: 960px;
+      margin: auto;
+      padding: 2rem;
+      background-color: #1b1b1b;
+      box-shadow: 0 0 15px #222;
+    }
+    h2 {
+      color: #fbbc05;
+    }
+    .tabs {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    .tab {
+      flex: 1;
+      padding: 1rem;
+      background: #222;
+      color: #ccc;
+      text-align: center;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: crimson;
+      color: #fff;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input, button {
+      padding: 0.5rem;
+      width: 100%;
+      margin-top: 0.3rem;
+      background: #333;
+      color: #fefefe;
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+    button {
+      background: crimson;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>SWF Admin Dashboard</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="dashboard.html">Admin Dashboard</a>
-    </nav>
-  </header>  <main>
-    <div id="loginPanel">
-      <h2>Admin Login</h2>
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button onclick="login()">Login</button>
-    </div><div id="dashboard" style="display:none;">
-  <h2>Admin Controls</h2>
-  <p>Interact with all three contracts below: SWF Coin, Master DAO, and Ultimate Staking. Functions are gated to admin and wallet connection is required.</p>
+    <h1>Moabite Federation Admin Dashboard</h1>
+    <p>Secure control center for SWF Coin, DAO & Staking Contracts</p>
+  </header>
+  <main>
+    <div class="tabs">
+      <div class="tab active" data-tab="swf">SWF Coin</div>
+      <div class="tab" data-tab="dao">Master DAO</div>
+      <div class="tab" data-tab="ultimate">Ultimate DAO</div>
+    </div><div class="tab-content active" id="swf">
+  <h2>SWF Coin Controls</h2>
+  <label>Mint Tokens</label>
+  <input id="swfMintAddress" placeholder="Recipient Address" />
+  <input id="swfMintAmount" placeholder="Amount" type="number" />
+  <button onclick="mintSWF()">Mint</button>
 
-  <div>
-    <button onclick="connectWallet()">Connect Wallet</button>
-    <p id="walletAddress"></p>
-  </div>
+  <label>Burn Tokens</label>
+  <input id="swfBurnAmount" placeholder="Amount to Burn" type="number" />
+  <button onclick="burnSWF()">Burn</button>
 
-  <section>
-    <h3>SWF Coin Functions</h3>
-    <button onclick="mintSWF()">Mint</button>
-    <button onclick="burnSWF()">Burn</button>
-    <button onclick="pauseSWF()">Pause</button>
-    <button onclick="unpauseSWF()">Unpause</button>
-    <button onclick="transferOwnershipSWF()">Transfer Ownership</button>
-  </section>
+  <label>Assign Gold Backing</label>
+  <input id="goldUser" placeholder="User Address" />
+  <input id="goldGrams" placeholder="Grams" type="number" />
+  <input id="goldCert" placeholder="Certificate ID" />
+  <button onclick="assignGold()">Assign Gold</button>
+</div>
 
-  <section>
-    <h3>Master DAO Functions</h3>
-    <button onclick="createProposal()">Create Proposal</button>
-    <button onclick="pauseDAO()">Pause DAO</button>
-    <button onclick="unpauseDAO()">Unpause DAO</button>
-  </section>
+<div class="tab-content" id="dao">
+  <h2>Master DAO Admin</h2>
+  <label>Create Proposal</label>
+  <input id="daoProposal" placeholder="Proposal Description" />
+  <button onclick="createDAOProposal()">Create</button>
 
-  <section>
-    <h3>Ultimate Staking</h3>
-    <button onclick="createPool()">Create Staking Pool</button>
-    <button onclick="claimRewards()">Claim Rewards</button>
-  </section>
+  <label>Pause / Unpause Contract</label>
+  <button onclick="pauseDAO()">Pause</button>
+  <button onclick="unpauseDAO()">Unpause</button>
+</div>
+
+<div class="tab-content" id="ultimate">
+  <h2>Ultimate DAO & Staking</h2>
+  <label>Create Staking Pool</label>
+  <input id="poolToken" placeholder="Token Address" />
+  <input id="rewardRate" placeholder="Reward Rate" type="number" />
+  <input id="lockPeriod" placeholder="Lock Period (blocks)" type="number" />
+  <button onclick="createStakingPool()">Create Pool</button>
+
+  <label>Stake in Pool</label>
+  <input id="stakePoolId" placeholder="Pool ID" type="number" />
+  <input id="stakeAmount" placeholder="Amount" type="number" />
+  <button onclick="stakeTokens()">Stake</button>
+
+  <label>Withdraw From Pool</label>
+  <input id="withdrawAmount" placeholder="Amount" type="number" />
+  <button onclick="withdrawStaking()">Withdraw</button>
 </div>
 
   </main>  <script>
-    const swfAddress = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
-    const daoAddress = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08";
-    const ultimateAddress = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
-
-    const swfABI = [/* FULL ABI FROM SWF COIN */];
-    const daoABI = [/* FULL ABI FROM MASTER DAO */];
-    const ultimateABI = [/* FULL ABI FROM ULTIMATE DAO */];
-
-    let web3;
-    let account;
-    let swf, dao, ultimate;
-
-    async function connectWallet() {
-      if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        account = accounts[0];
-        document.getElementById("walletAddress").innerText = "Connected: " + account;
-
-        swf = new web3.eth.Contract(swfABI, swfAddress);
-        dao = new web3.eth.Contract(daoABI, daoAddress);
-        ultimate = new web3.eth.Contract(ultimateABI, ultimateAddress);
-      } else {
-        alert("Please install MetaMask.");
-      }
-    }
-
-    function login() {
-      const u = document.getElementById("username").value;
-      const p = document.getElementById("password").value;
-      if (u === "Moor" && p === "Promote9") {
-        document.getElementById("loginPanel").style.display = 'none';
-        document.getElementById("dashboard").style.display = 'block';
-      } else {
-        alert("Incorrect login.");
-      }
-    }
-
-    async function mintSWF() {
-      const to = prompt("Recipient address:");
-      const amount = prompt("Amount:");
-      await swf.methods.mint(to, amount).send({ from: account });
-    }
-
-    async function burnSWF() {
-      const amount = prompt("Amount to burn:");
-      await swf.methods.burn(amount).send({ from: account });
-    }
-
-    async function pauseSWF() {
-      await swf.methods.pause().send({ from: account });
-    }
-
-    async function unpauseSWF() {
-      await swf.methods.unpause().send({ from: account });
-    }
-
-    async function transferOwnershipSWF() {
-      const newOwner = prompt("New Owner Address:");
-      await swf.methods.transferOwnership(newOwner).send({ from: account });
-    }
-
-    async function createProposal() {
-      const description = prompt("Proposal description:");
-      await dao.methods.createProposal(description).send({ from: account });
-    }
-
-    async function pauseDAO() {
-      await dao.methods.pauseContract().send({ from: account });
-    }
-
-    async function unpauseDAO() {
-      await dao.methods.unpauseContract().send({ from: account });
-    }
-
-    async function createPool() {
-      const token = prompt("Token address:");
-      const rewardRate = prompt("Reward rate:");
-      const lockPeriod = prompt("Lock period:");
-      await ultimate.methods.createPool(token, rewardRate, lockPeriod).send({ from: account });
-    }
-
-    async function claimRewards() {
-      const poolId = prompt("Pool ID:");
-      await ultimate.methods.claimRewards(poolId).send({ from: account });
-    }
+    // Tab logic
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
   </script></body>
 </html>
