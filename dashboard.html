@@ -73,84 +73,67 @@
     <button onclick="switchTab('swf')">SWF Token</button>
     <button onclick="switchTab('dao')">DAO</button>
     <button onclick="switchTab('ultimate')">Staking Pools</button>
-    <button onclick="switchTab('controls')">Smart Contract Controls</button>
+    <button onclick="switchTab('controls')">Contract Controls</button>
   </aside>  <main>
-    <p id="walletDisplay"></p>
-    <button onclick="connectWallet()">Connect Wallet</button><section id="dashboard" class="active">
-  <h1>Overview</h1>
-  <p>This is the Sovereign Wealth Fund Admin Panel. Use the controls on the left to navigate and manage smart contract operations.</p>
-  <div class="admin-section">
-    <p><strong>Contract Owner:</strong> <span id="contractOwner">Loading...</span></p>
-    <p><strong>Total Supply:</strong> <span id="totalSupply">...</span></p>
-    <p><strong>Staking Pools:</strong> <span id="poolCount">...</span></p>
-  </div>
-</section>
+    <div id="loginForm">
+      <h1>Admin Login</h1>
+      <input type="text" id="adminUser" placeholder="Username" /><br />
+      <input type="password" id="adminPass" placeholder="Password" /><br />
+      <button onclick="loginAdmin()">Login</button>
+    </div><div id="adminPanel" style="display:none">
+  <p id="walletDisplay"></p>
+  <button onclick="connectWallet()">Connect Wallet</button>
 
-<section id="swf">
-  <h2>SWF Token</h2>
-  <div class="admin-section">
-    <input id="mintTo" placeholder="Mint to address" />
-    <input id="mintAmount" type="number" placeholder="Amount" />
-    <button onclick="mintSWF()">Mint</button>
-  </div>
-  <div class="admin-section">
-    <input id="burnAmount" type="number" placeholder="Amount" />
-    <button onclick="burnSWF()">Burn</button>
-  </div>
-</section>
+  <section id="dashboard" class="active">
+    <h1>Overview</h1>
+    <p>Welcome to the Sovereign Wealth Fund Admin Panel. Navigate tabs to manage the smart contract features.</p>
+    <div class="admin-section">
+      <p><strong>Contract Owner:</strong> <span id="contractOwner">Loading...</span></p>
+      <p><strong>Total Supply:</strong> <span id="totalSupply">...</span></p>
+      <p><strong>Staking Pools:</strong> <span id="poolCount">...</span></p>
+    </div>
+  </section>
 
-<section id="dao">
-  <h2>DAO Proposals</h2>
-  <input id="proposalDesc" placeholder="Proposal description" />
-  <button onclick="createProposal()">Create Proposal</button>
-</section>
+  <section id="swf">
+    <h2>SWF Token</h2>
+    <div class="admin-section">
+      <input id="mintTo" placeholder="Mint to address" />
+      <input id="mintAmount" type="number" placeholder="Amount" />
+      <button onclick="mintSWF()">Mint</button>
+    </div>
+    <div class="admin-section">
+      <input id="burnAmount" type="number" placeholder="Amount" />
+      <button onclick="burnSWF()">Burn</button>
+    </div>
+  </section>
 
-<section id="ultimate">
-  <h2>Staking Pools</h2>
-  <input id="poolToken" placeholder="Token Address" />
-  <input id="rewardRate" placeholder="Reward Rate" />
-  <input id="lockPeriod" placeholder="Lock Period (seconds)" />
-  <button onclick="createPool()">Create Pool</button>
+  <section id="dao">
+    <h2>DAO Governance</h2>
+    <input id="proposalDesc" placeholder="Proposal description" />
+    <button onclick="createProposal()">Create Proposal</button>
+  </section>
 
-  <input id="claimPoolId" placeholder="Pool ID" />
-  <button onclick="claimRewards()">Claim Rewards</button>
-</section>
+  <section id="ultimate">
+    <h2>Staking Pools</h2>
+    <input id="poolToken" placeholder="Token Address" />
+    <input id="rewardRate" placeholder="Reward Rate" />
+    <input id="lockPeriod" placeholder="Lock Period (seconds)" />
+    <button onclick="createPool()">Create Pool</button>
 
-<section id="controls">
-  <h2>Smart Contract Controls</h2>
-  <div class="admin-section">
+    <input id="claimPoolId" placeholder="Pool ID" />
+    <button onclick="claimRewards()">Claim Rewards</button>
+  </section>
+
+  <section id="controls">
+    <h2>Smart Contract Controls</h2>
     <input id="newOwner" placeholder="New Owner Address" />
     <button onclick="transferOwnership()">Transfer Ownership</button>
-  </div>
-  <div class="admin-section">
+
     <button onclick="pauseContract()">Pause Contract</button>
     <button onclick="unpauseContract()">Unpause Contract</button>
-  </div>
-</section>
+  </section>
+</div>
 
   </main>  <script>
-    const ABI = [/* full embedded ABI goes here */];
-    const contractAddress = '0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738';
-    let web3;
-    let contract;
-
-    async function connectWallet() {
-      if (window.ethereum) {
-        web3 = new Web3(window.ethereum);
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        document.getElementById('walletDisplay').textContent = 'Wallet: ' + accounts[0];
-        contract = new web3.eth.Contract(ABI, contractAddress);
-      } else {
-        alert('Please install MetaMask!');
-      }
-    }
-
-    function switchTab(tabId) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-    }
-
-    // Add other function stubs here like mintSWF(), createProposal(), pauseContract(), etc.
-  </script></body>
-</html>
+    const ADMIN_USER = "Moor";
+    const ADMIN_PASS =
