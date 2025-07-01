@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SWF Admin Dashboard</title>
@@ -10,40 +9,68 @@
       color: #fefefe;
       font-family: 'Segoe UI', sans-serif;
       padding: 2rem;
-    }
-    h1 {
-      color: gold;
-    }
-    section {
-      background: #1b1b1b;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border: 1px solid #333;
-      border-radius: 12px;
-    }
-    input, button {
-      padding: 0.5rem;
-      margin: 0.25rem;
-      border-radius: 6px;
-    }
+    }nav {
+  background-color: #111;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 3px solid crimson;
+}
+
+nav a {
+  color: gold;
+  margin-right: 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: crimson;
+}
+
+h1 {
+  color: gold;
+}
+
+section {
+  background: #1b1b1b;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #333;
+  border-radius: 12px;
+}
+
+input,
+button {
+  padding: 0.5rem;
+  margin: 0.25rem;
+  border-radius: 6px;
+}
+
   </style>
-</head>
-<body>
-  <h1>SWF Integrated Admin Dashboard</h1>
+</head><body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="staking.html">Staking</a>
+    <a href="dashboard.html">Admin Dashboard</a>
+  </nav>  <h1>SWF Integrated Admin Dashboard</h1>
   <button onclick="connectWallet()">Connect Wallet</button>
   <p id="wallet-address"></p>  <section>
-    <h2>SWF Coin</h2>
+    <h2>Welcome to the Admin Dashboard</h2>
+    <p>This interface allows administrators of the Sovran Wealth Fund (SWF) to interact with key contract functions including minting and burning tokens, managing DAO proposals, and configuring staking pools.</p>
+    <p><strong>Instructions:</strong> Connect your wallet, then use each section below to interact with your respective smart contracts. Ensure the wallet used has proper permissions for each action.</p>
+  </section>  <section>
+    <h2>SWF Coin Controls</h2>
     <input id="mintTo" placeholder="Recipient Address">
     <input id="mintAmount" type="number" placeholder="Amount">
     <button onclick="mintSWF()">Mint SWF</button><br>
     <input id="burnAmount" type="number" placeholder="Amount">
     <button onclick="burnSWF()">Burn SWF</button>
   </section>  <section>
-    <h2>SWFMaster DAO</h2>
+    <h2>SWFMaster DAO Proposal</h2>
     <input id="proposalDesc" placeholder="Proposal Description">
     <button onclick="createProposalDAO()">Create Proposal</button>
   </section>  <section>
-    <h2>SWFMasterDAO_Ultimate</h2>
+    <h2>Staking Pool Management (SWFMasterDAO_Ultimate)</h2>
     <input id="poolToken" placeholder="Token Address">
     <input id="rewardRate" placeholder="Reward Rate">
     <input id="lockPeriod" placeholder="Lock Period">
@@ -58,9 +85,9 @@
     const DAOAddress = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08";
     const UltimateAddress = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
 
-    const SWFAbi = [/* SWF Coin ABI here */];
-    const DAOAbi = [/* SWFMaster DAO ABI here */];
-    const UltimateAbi = [/* SWFMasterDAO_Ultimate ABI here */];
+    const SWFAbi = /* Paste full SWF Coin ABI here */ [];
+    const DAOAbi = /* Paste full SWFMaster DAO ABI here */ [];
+    const UltimateAbi = /* Paste full SWFMasterDAO_Ultimate ABI here */ [];
 
     let swf, dao, ultimate;
 
@@ -107,5 +134,4 @@
       const poolId = document.getElementById("claimPoolId").value;
       await ultimate.methods.claimRewards(poolId).send({ from: account });
     }
-  </script></body>
-</html>
+  </script></body></html>
