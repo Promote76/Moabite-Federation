@@ -1,144 +1,62 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moabite Federation Admin Dashboard</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
-  <script defer src="connect.js"></script>
-  <script defer src="dashboard.js"></script>
-  <style>
-    body {
-      background-color: #0e0e0e;
-      color: #fefefe;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #111;
-      color: gold;
-      padding: 1rem;
-      text-align: center;
-      border-bottom: 4px solid crimson;
-    }
-    main {
-      max-width: 960px;
-      margin: auto;
-      padding: 2rem;
-      background-color: #1b1b1b;
-      box-shadow: 0 0 15px #222;
-    }
-    h2 {
-      color: #fbbc05;
-    }
-    .tabs {
-      display: flex;
-      margin-bottom: 1rem;
-    }
-    .tab {
-      flex: 1;
-      padding: 1rem;
-      background: #222;
-      color: #ccc;
-      text-align: center;
-      cursor: pointer;
-    }
-    .tab.active {
-      background: crimson;
-      color: #fff;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-    input, button {
-      padding: 0.5rem;
-      width: 100%;
-      margin-top: 0.3rem;
-      background: #333;
-      color: #fefefe;
-      border: 1px solid #444;
-      border-radius: 4px;
-    }
-    button {
-      background: crimson;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Moabite Federation Admin Dashboard</h1>
-    <p>Secure control center for SWF Coin, DAO & Staking Contracts</p>
-  </header>
-  <main>
-    <div class="tabs">
-      <div class="tab active" data-tab="swf">SWF Coin</div>
-      <div class="tab" data-tab="dao">Master DAO</div>
-      <div class="tab" data-tab="ultimate">Ultimate DAO</div>
-    </div><div class="tab-content active" id="swf">
-  <h2>SWF Coin Controls</h2>
-  <label>Mint Tokens</label>
-  <input id="swfMintAddress" placeholder="Recipient Address" />
-  <input id="swfMintAmount" placeholder="Amount" type="number" />
-  <button onclick="mintSWF()">Mint</button>
+import React, { useState, useEffect } from "react"; import { ethers } from "ethers"; import SWFABI from "./abis/SWFABI.json"; import DAOMasterABI from "./abis/DAOMasterABI.json"; import UltimateDAOABI from "./abis/UltimateDAOABI.json";
 
-  <label>Burn Tokens</label>
-  <input id="swfBurnAmount" placeholder="Amount to Burn" type="number" />
-  <button onclick="burnSWF()">Burn</button>
+const SWF_ADDRESS = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738"; const DAO_ADDRESS = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08"; const ULTIMATE_DAO_ADDRESS = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
 
-  <label>Assign Gold Backing</label>
-  <input id="goldUser" placeholder="User Address" />
-  <input id="goldGrams" placeholder="Grams" type="number" />
-  <input id="goldCert" placeholder="Certificate ID" />
-  <button onclick="assignGold()">Assign Gold</button>
+export default function Dashboard() { const [provider, setProvider] = useState(null); const [signer, setSigner] = useState(null); const [account, setAccount] = useState(""); const [balance, setBalance] = useState("0"); const [proposal, setProposal] = useState("");
+
+const [swf, setSwf] = useState(null); const [dao, setDao] = useState(null); const [ultimateDao, setUltimateDao] = useState(null);
+
+useEffect(() => { const init = async () => { const prov = new ethers.BrowserProvider(window.ethereum); const signer = await prov.getSigner(); const acc = await signer.getAddress();
+
+const swf = new ethers.Contract(SWF_ADDRESS, SWFABI, signer);
+  const dao = new ethers.Contract(DAO_ADDRESS, DAOMasterABI, signer);
+  const ultimateDao = new ethers.Contract(ULTIMATE_DAO_ADDRESS, UltimateDAOABI, signer);
+
+  setProvider(prov);
+  setSigner(signer);
+  setAccount(acc);
+  setSwf(swf);
+  setDao(dao);
+  setUltimateDao(ultimateDao);
+
+  const bal = await swf.balanceOf(acc);
+  setBalance(ethers.formatUnits(bal));
+};
+init();
+
+}, []);
+
+const createProposal = async () => { if (!proposal) return; await dao.createProposal(proposal); setProposal(""); };
+
+return ( <div style={{ backgroundColor: "#111", color: "#eee", minHeight: "100vh", padding: "2rem", fontFamily: "Segoe UI" }}> <h1 style={{ color: "gold", textAlign: "center" }}>Sovran Wealth Fund DAO Dashboard</h1> <p style={{ textAlign: "center", fontStyle: "italic" }}>Interact with the SWF Token, DAO, and Ultimate DAO Contracts</p>
+
+<section style={{ marginTop: "2rem", background: "#1e1e1e", padding: "1rem", borderRadius: "12px" }}>
+    <h2>Your Wallet</h2>
+    <p><strong>Address:</strong> {account}</p>
+    <p><strong>SWF Balance:</strong> {balance}</p>
+  </section>
+
+  <section style={{ marginTop: "2rem", background: "#1e1e1e", padding: "1rem", borderRadius: "12px" }}>
+    <h2>Create DAO Proposal</h2>
+    <input
+      type="text"
+      placeholder="Enter proposal description"
+      value={proposal}
+      onChange={e => setProposal(e.target.value)}
+      style={{ width: "100%", padding: "0.5rem", fontSize: "1rem" }}
+    />
+    <button onClick={createProposal} style={{ marginTop: "1rem", backgroundColor: "gold", padding: "0.5rem 1rem", fontWeight: "bold", border: "none" }}>Submit Proposal</button>
+  </section>
+
+  <section style={{ marginTop: "2rem", background: "#1e1e1e", padding: "1rem", borderRadius: "12px" }}>
+    <h2>Instructions</h2>
+    <ol>
+      <li>Connect your MetaMask wallet to this dApp.</li>
+      <li>View your SWF token balance and submit proposals.</li>
+      <li>Advanced features such as staking, voting, and treasury will be enabled next.</li>
+    </ol>
+  </section>
 </div>
 
-<div class="tab-content" id="dao">
-  <h2>Master DAO Admin</h2>
-  <label>Create Proposal</label>
-  <input id="daoProposal" placeholder="Proposal Description" />
-  <button onclick="createDAOProposal()">Create</button>
+); }
 
-  <label>Pause / Unpause Contract</label>
-  <button onclick="pauseDAO()">Pause</button>
-  <button onclick="unpauseDAO()">Unpause</button>
-</div>
-
-<div class="tab-content" id="ultimate">
-  <h2>Ultimate DAO & Staking</h2>
-  <label>Create Staking Pool</label>
-  <input id="poolToken" placeholder="Token Address" />
-  <input id="rewardRate" placeholder="Reward Rate" type="number" />
-  <input id="lockPeriod" placeholder="Lock Period (blocks)" type="number" />
-  <button onclick="createStakingPool()">Create Pool</button>
-
-  <label>Stake in Pool</label>
-  <input id="stakePoolId" placeholder="Pool ID" type="number" />
-  <input id="stakeAmount" placeholder="Amount" type="number" />
-  <button onclick="stakeTokens()">Stake</button>
-
-  <label>Withdraw From Pool</label>
-  <input id="withdrawAmount" placeholder="Amount" type="number" />
-  <button onclick="withdrawStaking()">Withdraw</button>
-</div>
-
-  </main>  <script>
-    // Tab logic
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-      });
-    });
-  </script></body>
-</html>
