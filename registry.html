@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registry | Moabite Federation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Land Registry | Moabite Federation</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       margin: 0;
@@ -18,6 +18,7 @@
       padding: 1.5rem 1rem;
       text-align: center;
       border-bottom: 4px solid crimson;
+      position: relative;
     }
     .menu-toggle {
       background-color: crimson;
@@ -50,159 +51,123 @@
     }
     main {
       padding: 2rem;
-      max-width: 1000px;
+      max-width: 900px;
       margin: auto;
       background-color: #1b1b1b;
       box-shadow: 0 0 12px #222;
     }
-    h2, h3 {
+    h2 {
       color: #fbbc05;
-    }
-    .ipfs-box {
-      background-color: #222;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px #333;
-      margin-bottom: 2rem;
-    }
-    input[type="text"], input[type="file"], select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background-color: #121212;
-      color: #fff;
-    }
-    button {
-      background: crimson;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      margin-top: 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: darkred;
-    }
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-      margin-top: 1rem;
     }
     footer {
       text-align: center;
-      margin-top: 2rem;
       padding: 1rem;
       background-color: #111;
-      color: #888;
+      border-top: 2px solid crimson;
+      font-size: 0.9rem;
+    }
+    .card {
+      background: #222;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    .label {
+      color: #fbbc05;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #555;
+      background-color: #111;
+      color: #fff;
+    }
+    .btn {
+      background-color: crimson;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .btn:hover {
+      background-color: darkred;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Moabite Land Registry</h1>
+    <h1>Land Title Verification & IPFS Registry</h1>
     <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
     <div class="menu" id="mainMenu">
       <a href="index.html">Home</a>
-      <a href="about.html">About</a>
+      <a href="registry.html">Land Registry</a>
       <a href="staking.html">Staking</a>
       <a href="wallet-login.html">Wallet Login</a>
       <a href="governance.html">Governance</a>
       <a href="rewards-history.html">Rewards</a>
-      <a href="registry.html">Land Registry</a>
     </div>
   </header>
-
   <main>
-    <h2>Land Title Verification & IPFS Registry</h2>
-    <p>This registry enables tribal members and stakeholders to view verified land ownership documents. All records are stored on IPFS for decentralized access.</p>
+    <div class="card">
+      <div class="label">Latest Verified Document</div>
+      <p style="font-size: 0.85rem; color: #ccc;">
+        CID:<br>
+        bafybeig3afgfyeeagwtwnteejhvcxh5gquybvf6xah66edxtxwswfh6nm
+      </p>
+    </div><div class="card">
+  <div class="label">Upload New Registry Document</div>
+  <p>(Uploads are staged as pending until approved)</p>
+  <input type="text" id="newCID" placeholder="Paste IPFS CID here (manual entry)" />
+  <button class="btn" onclick="submitCID()">Submit CID</button>
+</div>
 
-    <div class="ipfs-box">
-      <h3>Latest Verified Document</h3>
-      <p><strong>CID:</strong> bafybeig3afgfyeeagwtwnteejhvcxh5gquyvbvf6xah66edxtxwswfh6nm</p>
-      <iframe src="https://gateway.pinata.cloud/ipfs/bafybeig3afgfyeeagwtwnteejhvcxh5gquyvbvf6xah66edxtxwswfh6nm" loading="lazy"></iframe>
-    </div>
+<div class="card">
+  <div class="label">Registry Filter</div>
+  <label for="statusFilter">Show by status:</label>
+  <select id="statusFilter" onchange="filterRegistry()">
+    <option>All</option>
+    <option>Verified</option>
+    <option>Pending</option>
+  </select>
+  <ul id="registryList">
+    <li>bafybeig3afgfyeeagwtwnteejhvcxh5gquybvf6xah66edxtxwswfh6nm (Verified)</li>
+    <li>bafyexamplependingcid123456789 (Pending)</li>
+    <li>bafyexamplependingcid123456789 (Verified)</li>
+  </ul>
+</div>
 
-    <div class="ipfs-box">
-      <h3>Upload New Registry Document</h3>
-      <p>(Uploads are staged as pending until approved)</p>
-      <input type="text" id="newCID" placeholder="Paste IPFS CID here (manual entry)" />
-      <button onclick="addCID()">Submit CID</button>
-    </div>
+<div class="card">
+  <div class="label">Admin Approval Queue (Preview)</div>
+  <p>Admins can approve or deny user-submitted entries here.</p>
+</div>
 
-    <div class="ipfs-box">
-      <h3>Registry Filter</h3>
-      <label for="filterStatus">Show by status:</label>
-      <select id="filterStatus" onchange="filterCIDs()">
-        <option value="all">All</option>
-        <option value="verified">Verified</option>
-        <option value="pending">Pending</option>
-      </select>
-
-      <ul id="cidList" style="margin-top:1rem;">
-        <li data-status="verified">bafybeig3afgfyeeagwtwnteejhvcxh5gquyvbvf6xah66edxtxwswfh6nm (Verified)</li>
-        <li data-status="pending">bafyexamplependingcid123456789 (Pending)</li>
-      </ul>
-    </div>
-
-    <div class="ipfs-box">
-      <h3>Admin Approval Queue (Preview)</h3>
-      <p>Admins can approve or deny user-submitted entries here.</p>
-      <ul id="approvalQueue">
-        <li>bafyexamplependingcid123456789 <button onclick="approveCID(this)">Approve</button> <button onclick="denyCID(this)">Deny</button></li>
-      </ul>
-    </div>
   </main>
-
   <footer>
-    <p>&copy; 2025 The Moabite Federation | Contact: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a></p>
+    © 2025 The Moabite Federation | Contact: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a>
   </footer>
-
   <script>
     function toggleMenu() {
-      document.getElementById('mainMenu').classList.toggle('show');
+      document.getElementById("mainMenu").classList.toggle("show");
     }
-
-    function addCID() {
-      const cid = document.getElementById('newCID').value.trim();
-      if (cid) {
-        const newLi = document.createElement('li');
-        newLi.setAttribute('data-status', 'pending');
-        newLi.textContent = cid + " (Pending)";
-        document.getElementById('cidList').appendChild(newLi);
-
-        // Add to approval queue
-        const qItem = document.createElement('li');
-        qItem.innerHTML = cid + ' <button onclick="approveCID(this)">Approve</button> <button onclick="denyCID(this)">Deny</button>';
-        document.getElementById('approvalQueue').appendChild(qItem);
-        document.getElementById('newCID').value = '';
-      }
+    function submitCID() {
+      alert("CID submitted. Awaiting admin approval.");
     }
-
-    function approveCID(button) {
-      const cid = button.parentElement.textContent.replace(" Approve Deny", "").trim();
-      const list = document.getElementById('cidList');
-      const li = document.createElement('li');
-      li.setAttribute('data-status', 'verified');
-      li.textContent = cid + " (Verified)";
-      list.appendChild(li);
-      button.parentElement.remove();
-    }
-
-    function denyCID(button) {
-      button.parentElement.remove();
-    }
-
-    function filterCIDs() {
-      const filter = document.getElementById('filterStatus').value;
-      const list = document.getElementById('cidList').getElementsByTagName('li');
-      for (let i = 0; i < list.length; i++) {
-        const status = list[i].getAttribute('data-status');
-        list[i].style.display = (filter === 'all' || filter === status) ? '' : 'none';
-      }
+    function filterRegistry() {
+      const filter = document.getElementById("statusFilter").value;
+      const list = document.getElementById("registryList");
+      const items = list.querySelectorAll("li");
+      items.forEach(item => {
+        const text = item.textContent;
+        item.style.display = (filter === 'All' || text.includes(filter)) ? 'list-item' : 'none';
+      });
     }
   </script>
 </body>
