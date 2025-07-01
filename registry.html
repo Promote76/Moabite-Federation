@@ -1,175 +1,209 @@
-
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SWF Registry</title>
-  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registry | Moabite Federation</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #0e0e0e;
-      color: #fff;
+      color: #fefefe;
+      line-height: 1.6;
     }
     header {
-      background: #111;
-      padding: 1rem;
-      border-bottom: 4px solid crimson;
-      text-align: center;
-      position: relative;
-    }
-    header h1 {
+      background-color: #111;
       color: gold;
-      margin: 0;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-bottom: 4px solid crimson;
     }
-    header img {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      height: 60px;
+    .menu-toggle {
+      background-color: crimson;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      border-radius: 5px;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background-color: #1a1a1a;
+      padding: 1rem;
+    }
+    .menu.show {
+      display: flex;
+    }
+    .menu a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+    .menu a:hover {
+      color: gold;
     }
     main {
       padding: 2rem;
       max-width: 1000px;
       margin: auto;
+      background-color: #1b1b1b;
+      box-shadow: 0 0 12px #222;
     }
-    .intro {
-      background: #1b1b1b;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #222;
+    h2, h3 {
+      color: #fbbc05;
+    }
+    .ipfs-box {
+      background-color: #222;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #333;
       margin-bottom: 2rem;
     }
-    .intro h2 {
-      color: gold;
-    }
-    .filters {
-      margin: 1rem 0;
-    }
-    .filters button {
-      background: #333;
-      color: white;
-      border: none;
-      margin-right: 0.5rem;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .filters button.active, .filters button:hover {
-      background-color: crimson;
-    }
-    .record-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .record {
-      background: #222;
-      border-left: 4px solid gold;
-      padding: 1rem;
-      flex: 1 1 calc(50% - 1rem);
-      border-radius: 8px;
-      transition: transform 0.3s;
-    }
-    .record:hover {
-      transform: scale(1.02);
-    }
-    .status {
-      font-weight: bold;
-      color: lime;
-    }
-    .status.pending {
-      color: orange;
-    }
-    .upload-section {
-      background: #1a1a1a;
-      padding: 1rem;
-      margin-top: 2rem;
-      border-radius: 8px;
-    }
-    input[type="text"] {
+    input[type="text"], input[type="file"], select {
       width: 100%;
       padding: 0.5rem;
-      margin: 0.5rem 0;
-      border: none;
+      margin-top: 0.5rem;
       border-radius: 6px;
-      background: #333;
-      color: white;
+      border: 1px solid #444;
+      background-color: #121212;
+      color: #fff;
     }
-    button.upload {
-      background-color: gold;
-      color: #000;
+    button {
+      background: crimson;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      margin-top: 1rem;
       border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
+    }
+    button:hover {
+      background: darkred;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      margin-top: 1rem;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #111;
+      color: #888;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>SWF Decentralized Registry</h1>
-    <img src="images/SWFToken_Official_Image.png" alt="SWF Logo">
+    <h1>Moabite Land Registry</h1>
+    <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
+    <div class="menu" id="mainMenu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="staking.html">Staking</a>
+      <a href="wallet-login.html">Wallet Login</a>
+      <a href="governance.html">Governance</a>
+      <a href="rewards-history.html">Rewards</a>
+      <a href="registry.html">Land Registry</a>
+    </div>
   </header>
+
   <main>
-    <section class="intro">
-      <h2>Welcome to the Sovereign Wealth Fund Record Vault</h2>
-      <p>This registry page allows you to view all uploaded and verified decentralized records for The Moabite Federation. You can filter verified or pending entries. Users can also upload their own CIDs to be displayed here.</p>
-    </section><div class="filters">
-  <button class="active" onclick="filterRecords('all')">All</button>
-  <button onclick="filterRecords('verified')">Verified</button>
-  <button onclick="filterRecords('pending')">Pending</button>
-</div>
+    <h2>Land Title Verification & IPFS Registry</h2>
+    <p>This registry enables tribal members and stakeholders to view verified land ownership documents. All records are stored on IPFS for decentralized access.</p>
 
-<section class="record-list" id="records">
-  <!-- Dynamic Record Cards Here -->
-</section>
+    <div class="ipfs-box">
+      <h3>Latest Verified Document</h3>
+      <p><strong>CID:</strong> bafybeig3afgfyeeagwtwnteejhvcxh5gquyvbvf6xah66edxtxwswfh6nm</p>
+      <iframe src="https://gateway.pinata.cloud/ipfs/bafybeig3afgfyeeagwtwnteejhvcxh5gquyvbvf6xah66edxtxwswfh6nm" loading="lazy"></iframe>
+    </div>
 
-<section class="upload-section">
-  <h2>Upload Your Record CID</h2>
-  <input type="text" id="cidInput" placeholder="Paste your IPFS or Denet CID here...">
-  <button class="upload" onclick="uploadCID()">Submit CID</button>
-</section>
+    <div class="ipfs-box">
+      <h3>Upload New Registry Document</h3>
+      <p>(Uploads are staged as pending until approved)</p>
+      <input type="text" id="newCID" placeholder="Paste IPFS CID here (manual entry)" />
+      <button onclick="addCID()">Submit CID</button>
+    </div>
 
-  </main>  <script>
-    const data = [
-      { name: "Tribal Land Treaty", cid: "QmABC123xyz", status: "verified" },
-      { name: "DNA Sovereignty Claim", cid: "QmXYZ789abc", status: "pending" },
-      { name: "Live PMA Constitution", cid: "QmAABBCCDDEE", status: "verified" },
-    ];
+    <div class="ipfs-box">
+      <h3>Registry Filter</h3>
+      <label for="filterStatus">Show by status:</label>
+      <select id="filterStatus" onchange="filterCIDs()">
+        <option value="all">All</option>
+        <option value="verified">Verified</option>
+        <option value="pending">Pending</option>
+      </select>
 
-    function displayRecords(filter = 'all') {
-      const container = document.getElementById('records');
-      container.innerHTML = '';
-      data.filter(d => filter === 'all' || d.status === filter).forEach(record => {
-        const div = document.createElement('div');
-        div.className = 'record';
-        div.innerHTML = `
-          <h3>${record.name}</h3>
-          <p><strong>CID:</strong> ${record.cid}</p>
-          <p class="status ${record.status}">${record.status.toUpperCase()}</p>
-          <a href="https://ipfs.io/ipfs/${record.cid}" target="_blank">🔗 View Document</a>
-        `;
-        container.appendChild(div);
-      });
+      <ul id="cidList" style="margin-top:1rem;">
+        <li data-status="verified">bafybeig3afgfyeeagwtwnteejhvcxh5gquyvbvf6xah66edxtxwswfh6nm (Verified)</li>
+        <li data-status="pending">bafyexamplependingcid123456789 (Pending)</li>
+      </ul>
+    </div>
+
+    <div class="ipfs-box">
+      <h3>Admin Approval Queue (Preview)</h3>
+      <p>Admins can approve or deny user-submitted entries here.</p>
+      <ul id="approvalQueue">
+        <li>bafyexamplependingcid123456789 <button onclick="approveCID(this)">Approve</button> <button onclick="denyCID(this)">Deny</button></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 The Moabite Federation | Contact: <a href="mailto:info@sovranwealthfund.org">info@sovranwealthfund.org</a></p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mainMenu').classList.toggle('show');
     }
 
-    function filterRecords(status) {
-      document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`.filters button[onclick*="${status}"]`).classList.add('active');
-      displayRecords(status);
+    function addCID() {
+      const cid = document.getElementById('newCID').value.trim();
+      if (cid) {
+        const newLi = document.createElement('li');
+        newLi.setAttribute('data-status', 'pending');
+        newLi.textContent = cid + " (Pending)";
+        document.getElementById('cidList').appendChild(newLi);
+
+        // Add to approval queue
+        const qItem = document.createElement('li');
+        qItem.innerHTML = cid + ' <button onclick="approveCID(this)">Approve</button> <button onclick="denyCID(this)">Deny</button>';
+        document.getElementById('approvalQueue').appendChild(qItem);
+        document.getElementById('newCID').value = '';
+      }
     }
 
-    function uploadCID() {
-      const input = document.getElementById('cidInput');
-      const newCid = input.value.trim();
-      if (!newCid) return alert("Please enter a valid CID.");
-      data.push({ name: "User Upload", cid: newCid, status: "pending" });
-      input.value = '';
-      displayRecords();
+    function approveCID(button) {
+      const cid = button.parentElement.textContent.replace(" Approve Deny", "").trim();
+      const list = document.getElementById('cidList');
+      const li = document.createElement('li');
+      li.setAttribute('data-status', 'verified');
+      li.textContent = cid + " (Verified)";
+      list.appendChild(li);
+      button.parentElement.remove();
     }
 
-    displayRecords();
-  </script></body>
+    function denyCID(button) {
+      button.parentElement.remove();
+    }
+
+    function filterCIDs() {
+      const filter = document.getElementById('filterStatus').value;
+      const list = document.getElementById('cidList').getElementsByTagName('li');
+      for (let i = 0; i < list.length; i++) {
+        const status = list[i].getAttribute('data-status');
+        list[i].style.display = (filter === 'all' || filter === status) ? '' : 'none';
+      }
+    }
+  </script>
+</body>
 </html>
