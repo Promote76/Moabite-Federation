@@ -1,1 +1,111 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWF Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: #fefefe;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+    }
+    h1 {
+      color: gold;
+    }
+    section {
+      background: #1b1b1b;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #333;
+      border-radius: 12px;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin: 0.25rem;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SWF Integrated Admin Dashboard</h1>
+  <button onclick="connectWallet()">Connect Wallet</button>
+  <p id="wallet-address"></p>  <section>
+    <h2>SWF Coin</h2>
+    <input id="mintTo" placeholder="Recipient Address">
+    <input id="mintAmount" type="number" placeholder="Amount">
+    <button onclick="mintSWF()">Mint SWF</button><br>
+    <input id="burnAmount" type="number" placeholder="Amount">
+    <button onclick="burnSWF()">Burn SWF</button>
+  </section>  <section>
+    <h2>SWFMaster DAO</h2>
+    <input id="proposalDesc" placeholder="Proposal Description">
+    <button onclick="createProposalDAO()">Create Proposal</button>
+  </section>  <section>
+    <h2>SWFMasterDAO_Ultimate</h2>
+    <input id="poolToken" placeholder="Token Address">
+    <input id="rewardRate" placeholder="Reward Rate">
+    <input id="lockPeriod" placeholder="Lock Period">
+    <button onclick="createStakingPool()">Create Pool</button><br>
+    <input id="claimPoolId" placeholder="Pool ID">
+    <button onclick="claimRewards()">Claim Rewards</button>
+  </section>  <script>
+    let web3;
+    let account;
 
+    const SWFAddress = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
+    const DAOAddress = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08";
+    const UltimateAddress = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
+
+    const SWFAbi = [/* SWF Coin ABI here */];
+    const DAOAbi = [/* SWFMaster DAO ABI here */];
+    const UltimateAbi = [/* SWFMasterDAO_Ultimate ABI here */];
+
+    let swf, dao, ultimate;
+
+    async function connectWallet() {
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        const accounts = await web3.eth.getAccounts();
+        account = accounts[0];
+        document.getElementById("wallet-address").textContent = `Connected: ${account}`;
+
+        swf = new web3.eth.Contract(SWFAbi, SWFAddress);
+        dao = new web3.eth.Contract(DAOAbi, DAOAddress);
+        ultimate = new web3.eth.Contract(UltimateAbi, UltimateAddress);
+      } else {
+        alert("Please install MetaMask!");
+      }
+    }
+
+    async function mintSWF() {
+      const to = document.getElementById("mintTo").value;
+      const amount = document.getElementById("mintAmount").value;
+      await swf.methods.mint(to, web3.utils.toWei(amount, "ether")).send({ from: account });
+    }
+
+    async function burnSWF() {
+      const amount = document.getElementById("burnAmount").value;
+      await swf.methods.burn(web3.utils.toWei(amount, "ether")).send({ from: account });
+    }
+
+    async function createProposalDAO() {
+      const desc = document.getElementById("proposalDesc").value;
+      await dao.methods.createProposal(desc).send({ from: account });
+    }
+
+    async function createStakingPool() {
+      const token = document.getElementById("poolToken").value;
+      const reward = document.getElementById("rewardRate").value;
+      const lock = document.getElementById("lockPeriod").value;
+      await ultimate.methods.createPool(token, reward, lock).send({ from: account });
+    }
+
+    async function claimRewards() {
+      const poolId = document.getElementById("claimPoolId").value;
+      await ultimate.methods.claimRewards(poolId).send({ from: account });
+    }
+  </script></body>
+</html>
