@@ -1,1 +1,175 @@
 
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWF Registry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #0e0e0e;
+      color: #fff;
+    }
+    header {
+      background: #111;
+      padding: 1rem;
+      border-bottom: 4px solid crimson;
+      text-align: center;
+      position: relative;
+    }
+    header h1 {
+      color: gold;
+      margin: 0;
+    }
+    header img {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      height: 60px;
+    }
+    main {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .intro {
+      background: #1b1b1b;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #222;
+      margin-bottom: 2rem;
+    }
+    .intro h2 {
+      color: gold;
+    }
+    .filters {
+      margin: 1rem 0;
+    }
+    .filters button {
+      background: #333;
+      color: white;
+      border: none;
+      margin-right: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .filters button.active, .filters button:hover {
+      background-color: crimson;
+    }
+    .record-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .record {
+      background: #222;
+      border-left: 4px solid gold;
+      padding: 1rem;
+      flex: 1 1 calc(50% - 1rem);
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    .record:hover {
+      transform: scale(1.02);
+    }
+    .status {
+      font-weight: bold;
+      color: lime;
+    }
+    .status.pending {
+      color: orange;
+    }
+    .upload-section {
+      background: #1a1a1a;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 8px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: white;
+    }
+    button.upload {
+      background-color: gold;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SWF Decentralized Registry</h1>
+    <img src="images/SWFToken_Official_Image.png" alt="SWF Logo">
+  </header>
+  <main>
+    <section class="intro">
+      <h2>Welcome to the Sovereign Wealth Fund Record Vault</h2>
+      <p>This registry page allows you to view all uploaded and verified decentralized records for The Moabite Federation. You can filter verified or pending entries. Users can also upload their own CIDs to be displayed here.</p>
+    </section><div class="filters">
+  <button class="active" onclick="filterRecords('all')">All</button>
+  <button onclick="filterRecords('verified')">Verified</button>
+  <button onclick="filterRecords('pending')">Pending</button>
+</div>
+
+<section class="record-list" id="records">
+  <!-- Dynamic Record Cards Here -->
+</section>
+
+<section class="upload-section">
+  <h2>Upload Your Record CID</h2>
+  <input type="text" id="cidInput" placeholder="Paste your IPFS or Denet CID here...">
+  <button class="upload" onclick="uploadCID()">Submit CID</button>
+</section>
+
+  </main>  <script>
+    const data = [
+      { name: "Tribal Land Treaty", cid: "QmABC123xyz", status: "verified" },
+      { name: "DNA Sovereignty Claim", cid: "QmXYZ789abc", status: "pending" },
+      { name: "Live PMA Constitution", cid: "QmAABBCCDDEE", status: "verified" },
+    ];
+
+    function displayRecords(filter = 'all') {
+      const container = document.getElementById('records');
+      container.innerHTML = '';
+      data.filter(d => filter === 'all' || d.status === filter).forEach(record => {
+        const div = document.createElement('div');
+        div.className = 'record';
+        div.innerHTML = `
+          <h3>${record.name}</h3>
+          <p><strong>CID:</strong> ${record.cid}</p>
+          <p class="status ${record.status}">${record.status.toUpperCase()}</p>
+          <a href="https://ipfs.io/ipfs/${record.cid}" target="_blank">🔗 View Document</a>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function filterRecords(status) {
+      document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.filters button[onclick*="${status}"]`).classList.add('active');
+      displayRecords(status);
+    }
+
+    function uploadCID() {
+      const input = document.getElementById('cidInput');
+      const newCid = input.value.trim();
+      if (!newCid) return alert("Please enter a valid CID.");
+      data.push({ name: "User Upload", cid: newCid, status: "pending" });
+      input.value = '';
+      displayRecords();
+    }
+
+    displayRecords();
+  </script></body>
+</html>
