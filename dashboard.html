@@ -1,62 +1,128 @@
-import React, { useState, useEffect } from "react"; import { ethers } from "ethers"; import SWFABI from "./abis/SWFABI.json"; import DAOMasterABI from "./abis/DAOMasterABI.json"; import UltimateDAOABI from "./abis/UltimateDAOABI.json";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SWF Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e0e;
+      color: #fefefe;
+      display: flex;
+    }
+    aside {
+      background-color: #111;
+      width: 260px;
+      padding: 2rem 1rem;
+      border-right: 2px solid crimson;
+      height: 100vh;
+    }
+    aside h2 {
+      color: gold;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    aside button {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-weight: bold;
+      display: block;
+      padding: 0.75rem;
+      text-align: left;
+      cursor: pointer;
+    }
+    aside button:hover {
+      color: gold;
+    }
+    main {
+      flex: 1;
+      padding: 2rem;
+      background-color: #1b1b1b;
+    }
+    section {
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    h1, h2 {
+      color: gold;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #222;
+      color: white;
+    }
+    .admin-section {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h2>SWF Admin</h2>
+    <button onclick="switchTab('dashboard')">Dashboard</button>
+    <button onclick="switchTab('swf')">SWF Token</button>
+    <button onclick="switchTab('dao')">DAO</button>
+    <button onclick="switchTab('ultimate')">Staking Pools</button>
+    <button onclick="switchTab('controls')">Smart Contract Controls</button>
+  </aside>
 
-const SWF_ADDRESS = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738"; const DAO_ADDRESS = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08"; const ULTIMATE_DAO_ADDRESS = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
+  <main>
+    <p id="walletDisplay"></p>
+    <button onclick="connectWallet()">Connect Wallet</button>
 
-export default function Dashboard() { const [provider, setProvider] = useState(null); const [signer, setSigner] = useState(null); const [account, setAccount] = useState(""); const [balance, setBalance] = useState("0"); const [proposal, setProposal] = useState("");
+    <section id="dashboard" class="active">
+      <h1>Overview</h1>
+      <p>This is the Sovereign Wealth Fund Admin Panel. Use the controls on the left to navigate and manage smart contract operations.</p>
+      <div class="admin-section">
+        <p><strong>Contract Owner:</strong> <span id="contractOwner">Loading...</span></p>
+        <p><strong>Total Supply:</strong> <span id="totalSupply">...</span></p>
+        <p><strong>Staking Pools:</strong> <span id="poolCount">...</span></p>
+      </div>
+    </section>
 
-const [swf, setSwf] = useState(null); const [dao, setDao] = useState(null); const [ultimateDao, setUltimateDao] = useState(null);
+    <section id="swf">
+      <h2>SWF Token</h2>
+      <div class="admin-section">
+        <input id="mintTo" placeholder="Mint to address" />
+        <input id="mintAmount" type="number" placeholder="Amount" />
+        <button onclick="mintSWF()">Mint</button>
+      </div>
+      <div class="admin-section">
+        <input id="burnAmount" type="number" placeholder="Amount" />
+        <button onclick="burnSWF()">Burn</button>
+      </div>
+    </section>
 
-useEffect(() => { const init = async () => { const prov = new ethers.BrowserProvider(window.ethereum); const signer = await prov.getSigner(); const acc = await signer.getAddress();
+    <section id="dao">
+      <h2>DAO Proposals</h2>
+      <input id="proposalDesc" placeholder="Proposal description" />
+      <button onclick="createProposal()">Create Proposal</button>
+    </section>
 
-const swf = new ethers.Contract(SWF_ADDRESS, SWFABI, signer);
-  const dao = new ethers.Contract(DAO_ADDRESS, DAOMasterABI, signer);
-  const ultimateDao = new ethers.Contract(ULTIMATE_DAO_ADDRESS, UltimateDAOABI, signer);
+    <section id="ultimate">
+      <h2>Staking Pools</h2>
+      <input id="poolToken" placeholder="Token Address" />
+      <input id="rewardRate" placeholder="Reward Rate" />
+      <input id="lockPeriod" placeholder="Lock Period (seconds)" />
+      <button onclick="createPool()">Create Pool</button>
 
-  setProvider(prov);
-  setSigner(signer);
-  setAccount(acc);
-  setSwf(swf);
-  setDao(dao);
-  setUltimateDao(ultimateDao);
+      <input id="claimPoolId" placeholder="Pool ID" />
+      <button onclick="claimRewards()">Claim Rewards</button>
+    </section>
 
-  const bal = await swf.balanceOf(acc);
-  setBalance(ethers.formatUnits(bal));
-};
-init();
-
-}, []);
-
-const createProposal = async () => { if (!proposal) return; await dao.createProposal(proposal); setProposal(""); };
-
-return ( <div style={{ backgroundColor: "#111", color: "#eee", minHeight: "100vh", padding: "2rem", fontFamily: "Segoe UI" }}> <h1 style={{ color: "gold", textAlign: "center" }}>Sovran Wealth Fund DAO Dashboard</h1> <p style={{ textAlign: "center", fontStyle: "italic" }}>Interact with the SWF Token, DAO, and Ultimate DAO Contracts</p>
-
-<section style={{ marginTop: "2rem", background: "#1e1e1e", padding: "1rem", borderRadius: "12px" }}>
-    <h2>Your Wallet</h2>
-    <p><strong>Address:</strong> {account}</p>
-    <p><strong>SWF Balance:</strong> {balance}</p>
-  </section>
-
-  <section style={{ marginTop: "2rem", background: "#1e1e1e", padding: "1rem", borderRadius: "12px" }}>
-    <h2>Create DAO Proposal</h2>
-    <input
-      type="text"
-      placeholder="Enter proposal description"
-      value={proposal}
-      onChange={e => setProposal(e.target.value)}
-      style={{ width: "100%", padding: "0.5rem", fontSize: "1rem" }}
-    />
-    <button onClick={createProposal} style={{ marginTop: "1rem", backgroundColor: "gold", padding: "0.5rem 1rem", fontWeight: "bold", border: "none" }}>Submit Proposal</button>
-  </section>
-
-  <section style={{ marginTop: "2rem", background: "#1e1e1e", padding: "1rem", borderRadius: "12px" }}>
-    <h2>Instructions</h2>
-    <ol>
-      <li>Connect your MetaMask wallet to this dApp.</li>
-      <li>View your SWF token balance and submit proposals.</li>
-      <li>Advanced features such as staking, voting, and treasury will be enabled next.</li>
-    </ol>
-  </section>
-</div>
-
-); }
-
+    <section id="controls">
+      <h2>Smart Contract Controls</h2>
+      <div class="admin-section">
+        <input id="newOwner" placeholder="New Owner Address" />
+        <button onclick="transferOwnership()">Transfer Ownership</button
