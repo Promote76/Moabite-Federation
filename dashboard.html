@@ -64,44 +64,32 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid #333;
     }
-    #loginPanel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+    .web3-icon {
+      height: 18px;
+      margin-right: 6px;
+      vertical-align: middle;
     }
-    #loginPanel input {
-      margin: 0.5rem;
-      width: 200px;
+    .motion-tab {
+      transition: all 0.3s ease;
     }
-    #loginPanel button {
-      margin-top: 1rem;
+    .motion-tab:hover {
+      transform: translateX(5px);
+      color: gold;
     }
   </style>
 </head>
 <body>
-  <div id="loginPanel">
-    <h2>Admin Login</h2>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="verifyLogin()">Login</button>
-    <p id="loginError" style="color: crimson;"></p>
-  </div>  <aside style="display: none">
+  <aside>
     <h2>SWF Admin</h2>
-    <button onclick="switchTab('dashboard')">Dashboard</button>
-    <button onclick="switchTab('swf')">SWF Token</button>
-    <button onclick="switchTab('dao')">DAO</button>
-    <button onclick="switchTab('ultimate')">Staking Pools</button>
-    <button onclick="switchTab('controls')">Smart Contract Controls</button>
-  </aside>  <main style="display: none">
+    <button class="motion-tab" onclick="switchTab('dashboard')">🏠 Dashboard</button>
+    <button class="motion-tab" onclick="switchTab('swf')">🪙 SWF Token</button>
+    <button class="motion-tab" onclick="switchTab('dao')">🗳 DAO</button>
+    <button class="motion-tab" onclick="switchTab('ultimate')">📊 Staking</button>
+    <button class="motion-tab" onclick="switchTab('controls')">🛠 Controls</button>
+  </aside>
+  <main>
     <p id="walletDisplay"></p>
-    <button onclick="connectWallet()">Connect Wallet</button><section id="dashboard" class="active">
+    <button onclick="connectWallet()">🔌 Connect Wallet</button><section id="dashboard" class="active">
   <h1>Overview</h1>
   <p>This is the Sovereign Wealth Fund Admin Panel. Use the controls on the left to navigate and manage smart contract operations.</p>
   <div class="admin-section">
@@ -112,7 +100,7 @@
 </section>
 
 <section id="swf">
-  <h2>SWF Token</h2>
+  <h2>SWF Token Management</h2>
   <div class="admin-section">
     <input id="mintTo" placeholder="Mint to address" />
     <input id="mintAmount" type="number" placeholder="Amount" />
@@ -125,13 +113,13 @@
 </section>
 
 <section id="dao">
-  <h2>DAO Proposals</h2>
+  <h2>DAO Proposal Submission</h2>
   <input id="proposalDesc" placeholder="Proposal description" />
   <button onclick="createProposal()">Create Proposal</button>
 </section>
 
 <section id="ultimate">
-  <h2>Staking Pools</h2>
+  <h2>Staking Pool Administration</h2>
   <input id="poolToken" placeholder="Token Address" />
   <input id="rewardRate" placeholder="Reward Rate" />
   <input id="lockPeriod" placeholder="Lock Period (seconds)" />
@@ -142,31 +130,33 @@
 </section>
 
 <section id="controls">
-  <h2>Smart Contract Controls</h2>
+  <h2>Advanced Contract Controls</h2>
   <div class="admin-section">
     <input id="newOwner" placeholder="New Owner Address" />
     <button onclick="transferOwnership()">Transfer Ownership</button>
   </div>
+  <div class="admin-section">
+    <button onclick="pauseContract()">Pause Contract</button>
+    <button onclick="unpauseContract()">Unpause Contract</button>
+  </div>
 </section>
 
-  </main>  <script>
-    function verifyLogin() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-      if (user === "Moor" && pass === "Promote9") {
-        document.getElementById("loginPanel").style.display = "none";
-        document.querySelector("aside").style.display = "block";
-        document.querySelector("main").style.display = "block";
+  </main>
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+    function connectWallet() {
+      if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum);
+        window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+          document.getElementById('walletDisplay').innerText = `Connected: ${accounts[0]}`;
+        });
       } else {
-        document.getElementById("loginError").textContent = "Invalid login credentials.";
+        alert('Please install MetaMask to use this dashboard.');
       }
     }
-
-    function switchTab(tabId) {
-      document.querySelectorAll("main section").forEach(section => {
-        section.classList.remove("active");
-      });
-      document.getElementById(tabId).classList.add("active");
-    }
-  </script></body>
+  </script>
+</body>
 </html>
