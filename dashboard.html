@@ -1,137 +1,142 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SWF Admin Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
-  <style>
-    body {
-      background-color: #0e0e0e;
-      color: #fefefe;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 2rem;
-    }nav {
-  background-color: #111;
-  padding: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 3px solid crimson;
-}
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>SWF Admin Dashboard</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Admin Dashboard</a>
+    </nav>
+  </header>  <main>
+    <div id="loginPanel">
+      <h2>Admin Login</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+    </div><div id="dashboard" style="display:none;">
+  <h2>Admin Controls</h2>
+  <p>Interact with all three contracts below: SWF Coin, Master DAO, and Ultimate Staking. Functions are gated to admin and wallet connection is required.</p>
 
-nav a {
-  color: gold;
-  margin-right: 20px;
-  text-decoration: none;
-  font-weight: bold;
-}
+  <div>
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <p id="walletAddress"></p>
+  </div>
 
-nav a:hover {
-  color: crimson;
-}
+  <section>
+    <h3>SWF Coin Functions</h3>
+    <button onclick="mintSWF()">Mint</button>
+    <button onclick="burnSWF()">Burn</button>
+    <button onclick="pauseSWF()">Pause</button>
+    <button onclick="unpauseSWF()">Unpause</button>
+    <button onclick="transferOwnershipSWF()">Transfer Ownership</button>
+  </section>
 
-h1 {
-  color: gold;
-}
+  <section>
+    <h3>Master DAO Functions</h3>
+    <button onclick="createProposal()">Create Proposal</button>
+    <button onclick="pauseDAO()">Pause DAO</button>
+    <button onclick="unpauseDAO()">Unpause DAO</button>
+  </section>
 
-section {
-  background: #1b1b1b;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border: 1px solid #333;
-  border-radius: 12px;
-}
-
-input,
-button {
-  padding: 0.5rem;
-  margin: 0.25rem;
-  border-radius: 6px;
-}
-
-  </style>
-</head><body>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="staking.html">Staking</a>
-    <a href="dashboard.html">Admin Dashboard</a>
-  </nav>  <h1>SWF Integrated Admin Dashboard</h1>
-  <button onclick="connectWallet()">Connect Wallet</button>
-  <p id="wallet-address"></p>  <section>
-    <h2>Welcome to the Admin Dashboard</h2>
-    <p>This interface allows administrators of the Sovran Wealth Fund (SWF) to interact with key contract functions including minting and burning tokens, managing DAO proposals, and configuring staking pools.</p>
-    <p><strong>Instructions:</strong> Connect your wallet, then use each section below to interact with your respective smart contracts. Ensure the wallet used has proper permissions for each action.</p>
-  </section>  <section>
-    <h2>SWF Coin Controls</h2>
-    <input id="mintTo" placeholder="Recipient Address">
-    <input id="mintAmount" type="number" placeholder="Amount">
-    <button onclick="mintSWF()">Mint SWF</button><br>
-    <input id="burnAmount" type="number" placeholder="Amount">
-    <button onclick="burnSWF()">Burn SWF</button>
-  </section>  <section>
-    <h2>SWFMaster DAO Proposal</h2>
-    <input id="proposalDesc" placeholder="Proposal Description">
-    <button onclick="createProposalDAO()">Create Proposal</button>
-  </section>  <section>
-    <h2>Staking Pool Management (SWFMasterDAO_Ultimate)</h2>
-    <input id="poolToken" placeholder="Token Address">
-    <input id="rewardRate" placeholder="Reward Rate">
-    <input id="lockPeriod" placeholder="Lock Period">
-    <button onclick="createStakingPool()">Create Pool</button><br>
-    <input id="claimPoolId" placeholder="Pool ID">
+  <section>
+    <h3>Ultimate Staking</h3>
+    <button onclick="createPool()">Create Staking Pool</button>
     <button onclick="claimRewards()">Claim Rewards</button>
-  </section>  <script>
+  </section>
+</div>
+
+  </main>  <script>
+    const swfAddress = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
+    const daoAddress = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08";
+    const ultimateAddress = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
+
+    const swfABI = [/* FULL ABI FROM SWF COIN */];
+    const daoABI = [/* FULL ABI FROM MASTER DAO */];
+    const ultimateABI = [/* FULL ABI FROM ULTIMATE DAO */];
+
     let web3;
     let account;
-
-    const SWFAddress = "0x83E17aeB148d9b4b7Be0Be7C87dd73531a5a5738";
-    const DAOAddress = "0x1680F203Aafcbc64adAbD54C15472F7283aA8d08";
-    const UltimateAddress = "0xf1aFbA4804dB581f5eC43f7AFC3e522728ddDcF0";
-
-    const SWFAbi = /* Paste full SWF Coin ABI here */ [];
-    const DAOAbi = /* Paste full SWFMaster DAO ABI here */ [];
-    const UltimateAbi = /* Paste full SWFMasterDAO_Ultimate ABI here */ [];
-
     let swf, dao, ultimate;
 
     async function connectWallet() {
       if (window.ethereum) {
         web3 = new Web3(window.ethereum);
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         account = accounts[0];
-        document.getElementById("wallet-address").textContent = `Connected: ${account}`;
+        document.getElementById("walletAddress").innerText = "Connected: " + account;
 
-        swf = new web3.eth.Contract(SWFAbi, SWFAddress);
-        dao = new web3.eth.Contract(DAOAbi, DAOAddress);
-        ultimate = new web3.eth.Contract(UltimateAbi, UltimateAddress);
+        swf = new web3.eth.Contract(swfABI, swfAddress);
+        dao = new web3.eth.Contract(daoABI, daoAddress);
+        ultimate = new web3.eth.Contract(ultimateABI, ultimateAddress);
       } else {
-        alert("Please install MetaMask!");
+        alert("Please install MetaMask.");
+      }
+    }
+
+    function login() {
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      if (u === "Moor" && p === "Promote9") {
+        document.getElementById("loginPanel").style.display = 'none';
+        document.getElementById("dashboard").style.display = 'block';
+      } else {
+        alert("Incorrect login.");
       }
     }
 
     async function mintSWF() {
-      const to = document.getElementById("mintTo").value;
-      const amount = document.getElementById("mintAmount").value;
-      await swf.methods.mint(to, web3.utils.toWei(amount, "ether")).send({ from: account });
+      const to = prompt("Recipient address:");
+      const amount = prompt("Amount:");
+      await swf.methods.mint(to, amount).send({ from: account });
     }
 
     async function burnSWF() {
-      const amount = document.getElementById("burnAmount").value;
-      await swf.methods.burn(web3.utils.toWei(amount, "ether")).send({ from: account });
+      const amount = prompt("Amount to burn:");
+      await swf.methods.burn(amount).send({ from: account });
     }
 
-    async function createProposalDAO() {
-      const desc = document.getElementById("proposalDesc").value;
-      await dao.methods.createProposal(desc).send({ from: account });
+    async function pauseSWF() {
+      await swf.methods.pause().send({ from: account });
     }
 
-    async function createStakingPool() {
-      const token = document.getElementById("poolToken").value;
-      const reward = document.getElementById("rewardRate").value;
-      const lock = document.getElementById("lockPeriod").value;
-      await ultimate.methods.createPool(token, reward, lock).send({ from: account });
+    async function unpauseSWF() {
+      await swf.methods.unpause().send({ from: account });
+    }
+
+    async function transferOwnershipSWF() {
+      const newOwner = prompt("New Owner Address:");
+      await swf.methods.transferOwnership(newOwner).send({ from: account });
+    }
+
+    async function createProposal() {
+      const description = prompt("Proposal description:");
+      await dao.methods.createProposal(description).send({ from: account });
+    }
+
+    async function pauseDAO() {
+      await dao.methods.pauseContract().send({ from: account });
+    }
+
+    async function unpauseDAO() {
+      await dao.methods.unpauseContract().send({ from: account });
+    }
+
+    async function createPool() {
+      const token = prompt("Token address:");
+      const rewardRate = prompt("Reward rate:");
+      const lockPeriod = prompt("Lock period:");
+      await ultimate.methods.createPool(token, rewardRate, lockPeriod).send({ from: account });
     }
 
     async function claimRewards() {
-      const poolId = document.getElementById("claimPoolId").value;
+      const poolId = prompt("Pool ID:");
       await ultimate.methods.claimRewards(poolId).send({ from: account });
     }
-  </script></body></html>
+  </script></body>
+</html>
