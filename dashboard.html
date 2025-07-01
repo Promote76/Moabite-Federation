@@ -64,76 +64,109 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid #333;
     }
+    #loginPanel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #loginPanel input {
+      margin: 0.5rem;
+      width: 200px;
+    }
+    #loginPanel button {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
-  <aside>
+  <div id="loginPanel">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="verifyLogin()">Login</button>
+    <p id="loginError" style="color: crimson;"></p>
+  </div>  <aside style="display: none">
     <h2>SWF Admin</h2>
     <button onclick="switchTab('dashboard')">Dashboard</button>
     <button onclick="switchTab('swf')">SWF Token</button>
     <button onclick="switchTab('dao')">DAO</button>
     <button onclick="switchTab('ultimate')">Staking Pools</button>
-    <button onclick="switchTab('controls')">Contract Controls</button>
-  </aside>  <main>
-    <div id="loginForm">
-      <h1>Admin Login</h1>
-      <input type="text" id="adminUser" placeholder="Username" /><br />
-      <input type="password" id="adminPass" placeholder="Password" /><br />
-      <button onclick="loginAdmin()">Login</button>
-    </div><div id="adminPanel" style="display:none">
-  <p id="walletDisplay"></p>
-  <button onclick="connectWallet()">Connect Wallet</button>
+    <button onclick="switchTab('controls')">Smart Contract Controls</button>
+  </aside>  <main style="display: none">
+    <p id="walletDisplay"></p>
+    <button onclick="connectWallet()">Connect Wallet</button><section id="dashboard" class="active">
+  <h1>Overview</h1>
+  <p>This is the Sovereign Wealth Fund Admin Panel. Use the controls on the left to navigate and manage smart contract operations.</p>
+  <div class="admin-section">
+    <p><strong>Contract Owner:</strong> <span id="contractOwner">Loading...</span></p>
+    <p><strong>Total Supply:</strong> <span id="totalSupply">...</span></p>
+    <p><strong>Staking Pools:</strong> <span id="poolCount">...</span></p>
+  </div>
+</section>
 
-  <section id="dashboard" class="active">
-    <h1>Overview</h1>
-    <p>Welcome to the Sovereign Wealth Fund Admin Panel. Navigate tabs to manage the smart contract features.</p>
-    <div class="admin-section">
-      <p><strong>Contract Owner:</strong> <span id="contractOwner">Loading...</span></p>
-      <p><strong>Total Supply:</strong> <span id="totalSupply">...</span></p>
-      <p><strong>Staking Pools:</strong> <span id="poolCount">...</span></p>
-    </div>
-  </section>
+<section id="swf">
+  <h2>SWF Token</h2>
+  <div class="admin-section">
+    <input id="mintTo" placeholder="Mint to address" />
+    <input id="mintAmount" type="number" placeholder="Amount" />
+    <button onclick="mintSWF()">Mint</button>
+  </div>
+  <div class="admin-section">
+    <input id="burnAmount" type="number" placeholder="Amount" />
+    <button onclick="burnSWF()">Burn</button>
+  </div>
+</section>
 
-  <section id="swf">
-    <h2>SWF Token</h2>
-    <div class="admin-section">
-      <input id="mintTo" placeholder="Mint to address" />
-      <input id="mintAmount" type="number" placeholder="Amount" />
-      <button onclick="mintSWF()">Mint</button>
-    </div>
-    <div class="admin-section">
-      <input id="burnAmount" type="number" placeholder="Amount" />
-      <button onclick="burnSWF()">Burn</button>
-    </div>
-  </section>
+<section id="dao">
+  <h2>DAO Proposals</h2>
+  <input id="proposalDesc" placeholder="Proposal description" />
+  <button onclick="createProposal()">Create Proposal</button>
+</section>
 
-  <section id="dao">
-    <h2>DAO Governance</h2>
-    <input id="proposalDesc" placeholder="Proposal description" />
-    <button onclick="createProposal()">Create Proposal</button>
-  </section>
+<section id="ultimate">
+  <h2>Staking Pools</h2>
+  <input id="poolToken" placeholder="Token Address" />
+  <input id="rewardRate" placeholder="Reward Rate" />
+  <input id="lockPeriod" placeholder="Lock Period (seconds)" />
+  <button onclick="createPool()">Create Pool</button>
 
-  <section id="ultimate">
-    <h2>Staking Pools</h2>
-    <input id="poolToken" placeholder="Token Address" />
-    <input id="rewardRate" placeholder="Reward Rate" />
-    <input id="lockPeriod" placeholder="Lock Period (seconds)" />
-    <button onclick="createPool()">Create Pool</button>
+  <input id="claimPoolId" placeholder="Pool ID" />
+  <button onclick="claimRewards()">Claim Rewards</button>
+</section>
 
-    <input id="claimPoolId" placeholder="Pool ID" />
-    <button onclick="claimRewards()">Claim Rewards</button>
-  </section>
-
-  <section id="controls">
-    <h2>Smart Contract Controls</h2>
+<section id="controls">
+  <h2>Smart Contract Controls</h2>
+  <div class="admin-section">
     <input id="newOwner" placeholder="New Owner Address" />
     <button onclick="transferOwnership()">Transfer Ownership</button>
-
-    <button onclick="pauseContract()">Pause Contract</button>
-    <button onclick="unpauseContract()">Unpause Contract</button>
-  </section>
-</div>
+  </div>
+</section>
 
   </main>  <script>
-    const ADMIN_USER = "Moor";
-    const ADMIN_PASS = "Promote9";
+    function verifyLogin() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      if (user === "Moor" && pass === "Promote9") {
+        document.getElementById("loginPanel").style.display = "none";
+        document.querySelector("aside").style.display = "block";
+        document.querySelector("main").style.display = "block";
+      } else {
+        document.getElementById("loginError").textContent = "Invalid login credentials.";
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll("main section").forEach(section => {
+        section.classList.remove("active");
+      });
+      document.getElementById(tabId).classList.add("active");
+    }
+  </script></body>
+</html>
